@@ -21,13 +21,47 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+
 # open csv file
+def main():
+    f = open("books.csv")
+    reader = csv.reader(f)
+    for isbn, title, author, year in reader:
+        db.execute("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)",
+            {"isbn": isbn, "title": title, "author": author, "year": year})
+        print(f"Added books as {isbn}, {title}, {author}, {year}.")
+    db.commit()
+
+#about section
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+#registration
+@app.route("/signup", methods=['POST', 'GET'])
+def signup():
+
+    username = request.form.get("username")
+    password = reques.form.get("password")
+
+    db.execute("INSERT INTO users (name, password) VALUES (:username, :password)",
+    {"username": username, "password": password})
+    db.commit()
+    return render_template("tysignup.html")
 
 
 @app.route("/")
 def index():
     return render_template('index.html')
 
+# @app.route("/signup")
+# def signup():
+
+
+
+
 if __name__ == '__main__':
+    main()
     app.debug = True
     app.run()
