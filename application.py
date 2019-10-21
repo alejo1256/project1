@@ -1,5 +1,6 @@
 import os
 import csv
+import requests
 
 from flask import Flask, session, request, render_template
 from flask_session import Session
@@ -38,17 +39,17 @@ def main():
 def about():
     return render_template('about.html')
 
-#registration
-@app.route("/signup", methods=['POST', 'GET'])
-def signup():
 
-    username = request.form.get("username")
-    password = reques.form.get("password")
+#books section
+@app.route('/books')
+def books():
 
-    db.execute("INSERT INTO users (name, password) VALUES (:username, :password)",
-    {"username": username, "password": password})
-    db.commit()
-    return render_template("tysignup.html")
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "WsRpBZFdmNn6bAPS0hS3Yw", "isbns": "9781632168146" })
+    data = res.json()
+    rating = data['average_rating']
+    print(f"the average rating is {rating}")    
+
+    return render_template('books.html')
 
 
 @app.route("/")
