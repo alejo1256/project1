@@ -39,24 +39,29 @@ def about():
     return render_template('about.html')
 
 #registration
-@app.route("/signup", methods=['POST', 'GET'])
+@app.route("/signup", methods=['GET','POST'])
 def signup():
 
+    user_id = 0
     username = request.form.get("username")
-    password = reques.form.get("password")
+    password = request.form.get("password")
 
-    db.execute("INSERT INTO users (name, password) VALUES (:username, :password)",
-    {"username": username, "password": password})
-    db.commit()
-    return render_template("tysignup.html")
+    if request.method == "POST":
+        db.execute("INSERT INTO users (user_id, username, password) VALUES (:user_id + 1, :username, :password)",
+            {"user_id": user_id, "username": username, "password": password})
+        db.commit()
+
+    # flash('You just signed up! Redirecting back to home page')
+
+    # redirect(url_for('index'))
+
+    return render_template("signup.html")
 
 
 @app.route("/")
 def index():
     return render_template('index.html')
 
-# @app.route("/signup")
-# def signup():
 
 
 
