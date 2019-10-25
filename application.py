@@ -56,8 +56,6 @@ def books():
 def index():
     return render_template('index.html')
 
-# @app.route("/signup")
-# def signup():
 
 
 
