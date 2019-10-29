@@ -41,19 +41,17 @@ def about():
 #registration
 @app.route("/signup", methods=['GET','POST'])
 def signup():
-
-    user_id = 0
+    
     username = request.form.get("username")
     password = request.form.get("password")
 
     if request.method == "POST":
-        db.execute("INSERT INTO users (user_id, username, password) VALUES (:user_id + 1, :username, :password)",
-            {"user_id": user_id, "username": username, "password": password})
+        db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
+            {"username": username, "password": password})
         db.commit()
+        return render_template("success.html")
 
-    # flash('You just signed up! Redirecting back to home page')
 
-    # redirect(url_for('index'))
 
     return render_template("signup.html")
 
