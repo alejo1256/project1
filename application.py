@@ -75,7 +75,7 @@ def login():
             session['loggedin'] = True
             session['username'] = username
 
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard'))
             
     return render_template("login.html")
 
@@ -88,13 +88,13 @@ def logout():
 
 
 
-# home page
-@app.route("/home")
-def home():
+#dashboard
+@app.route("/dashboard")
+def dashboard():
 
     if 'loggedin' in session:
         message = "Welcome Back"
-        return render_template('home.html', username=session['username'], message=message)
+        return render_template("dashboard.html", username=session['username'], message=message)
    
 
 
