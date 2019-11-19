@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+
+{% block body%}
+
+<h1>{{ message }}</h1>
+
+<form  method="POST" action="{{ url_for('search') }}">
+        <div class="form-group">
+          <input class="form-control" name="search" placeholder="Type book name">
+        </div>
+        <button class="btn btn-primary">Search</button>
+</form>
+
+<p>  
+
+</p>
+{% for item in book %}
+<tr>
+    <td> {{item[1]}} by {{item[2]}} it was release in {{item[3]}}</td>
+    </br>
+</tr>
+{% endfor %}
+
+
+
+{% endblock %}

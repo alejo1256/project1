@@ -23,17 +23,6 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-
-# open csv file
-def main():
-    f = open("books.csv")
-    reader = csv.reader(f)
-    for isbn, title, author, year in reader:
-        db.execute("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)",
-            {"isbn": isbn, "title": title, "author": author, "year": year})
-        print(f"Added books as {isbn}, {title}, {author}, {year}.")
-    db.commit()
-
 #about section
 
 @app.route('/about')
@@ -75,7 +64,7 @@ def login():
             session['loggedin'] = True
             session['username'] = username
 
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('search'))
             
     return render_template("login.html")
 
@@ -103,6 +92,22 @@ def index():
     return render_template('index.html')
 
 
+
+# search bar
+@app.route("/search", methods=['GET', 'POST'])
+def search():
+    message = "You can find information on any book by using the search bar"
+    if request.method == "POST":
+        search = request.form.get("search")
+        print(search)
+        book = db.execute("SELECT * FROM books WHERE isbn LIKE '%s%' OR title LIKE '%s%' OR author LIKE '%s%' OR year LIKE '%s%' ORDER BY year ASC LIMIT 5",
+        {"s": search}).fetchall()
+        db.commit()
+        print(book)
+        return render_template('search.html', book=book)
+    return render_template('search.html', message=message)
+
+    
 
 
 
